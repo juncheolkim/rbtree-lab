@@ -1,6 +1,6 @@
 {
-  "files.associations": {
-    "assert.h": "c",
-    "stdio.h": "c"
-  }
+    "files.associations": {
+        "assert.h": "c",
+        "stdio.h": "c"
+    }
 }

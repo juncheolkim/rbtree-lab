@@ -24,7 +24,6 @@ void test_insert_single(const key_t key) {
   assert(p != NULL);
   assert(t->root == p);
   assert(p->key == key);
-  printf("1");
   assert(p->color == RBTREE_BLACK);  // color of root node should be black
 #ifdef SENTINEL
   assert(p->left == t->nil);
@@ -369,8 +368,8 @@ void test_find_erase_rand(const size_t n, const unsigned int seed) {
 }
 
 int main(void) {
-  // test_init(); // 성공
-  // test_insert_single(1024); // 성공 (delete 함수 업데이트)
+  test_init();
+  test_insert_single(1024);
   // test_find_single(512, 1024);
   // test_erase_root(128);
   // test_find_erase_fixed();

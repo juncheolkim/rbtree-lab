@@ -28,30 +28,49 @@ void delete_rbtree(rbtree *t) {
   // TODO: reclaim the tree nodes's memory
   if (t->root != NULL){
     delete_node(t->root);
-    if (t->root->left){
-      delete_node(t->root->left);
-    };
-    if (t->root->right){
-      delete_node(t->root->right);
-    };
   };
   free(t);
 }
 
+void insert_fixup(const rbtree *t, node_t *z){
+  if(t->root == z){
+    z->color = RBTREE_BLACK;
+  } // 루트일 경우 검정색으로 바꾼다.
+}
 
 node_t *rbtree_insert(rbtree *t, const key_t key) {
   // TODO: implement insert
-  node_t *p = (node_t *)calloc(1, sizeof(node_t)); \
+  node_t *p = (node_t *)calloc(1, sizeof(node_t));
   p->color = RBTREE_RED;
   p -> key = key;
   p -> left = NULL;
   p -> right = NULL;
-  p -> parent = NULL;
-  if (t->root == NULL){
-    t->root = p;
-    p -> color = RBTREE_BLACK;
-  };
 
+  node_t *y = NULL;
+  node_t *x = t->root;
+  while (x != NULL)
+  {
+    y = x;
+    if (key >= x->key)
+    {
+      x = x-> right;
+    } else {
+      x = x->left;
+    }
+  }
+
+  p ->parent=y;
+
+  if (y == NULL)
+  {
+    t->root = p;
+  } else if (p->key >= p->parent->key)
+  {
+    p->parent->right = p;
+  } else {
+    p->parent->left = p;
+  }
+  insert_fixup(t,p);
   return t->root;
 }
 

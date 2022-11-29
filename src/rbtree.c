@@ -25,12 +25,14 @@ rbtree *new_rbtree(void) {
 }
 
 void delete_node(rbtree *t,node_t *x) {
+    printf("진입해야만한다.\n");
     if (x->left != t->nil){
         delete_node(t, x->left);
     };
     if (x->right != t->nil) {
         delete_node(t, x->right);
     };
+    free(x);
 }
 
 void delete_rbtree(rbtree *t) {

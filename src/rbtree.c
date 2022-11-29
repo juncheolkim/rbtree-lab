@@ -195,11 +195,11 @@ node_t *rbtree_find(const rbtree *t, const key_t key) {
         }
         else if (p ->key > key)
         {
-            p = p -> right;
+            p = p -> left;
         }
         else
         {
-            p = p -> left;
+            p = p -> right;
         }
     }
     return tmp;

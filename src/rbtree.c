@@ -46,11 +46,12 @@ void left_rotate(rbtree *t, node_t *x);
 void right_rotate(rbtree *t, node_t *x);
 
 void insert_fixup(rbtree *t, node_t *z){
-    while (z->parent==RBTREE_RED)
+    node_t *y;
+    while (z->parent->color==RBTREE_RED)
     {
         if (z->parent==z->parent->parent->left)
         {
-            node_t *y = z->parent->parent->right;
+            y = z->parent->parent->right;
             if (y->color==RBTREE_RED)
             {
                 z->parent->color = RBTREE_BLACK;
@@ -64,15 +65,15 @@ void insert_fixup(rbtree *t, node_t *z){
                 {
                     z=z->parent;
                     left_rotate(t,z);
-                    z->parent->color = RBTREE_BLACK;
-                    z->parent->parent->color = RBTREE_RED;
-                    right_rotate(t,z->parent->parent);
                 }
+                z->parent->color = RBTREE_BLACK;
+                z->parent->parent->color = RBTREE_RED;
+                right_rotate(t,z->parent->parent);
             }
         }
         else
         {
-            node_t *y = z->parent->parent->left;
+            y = z->parent->parent->left;
             if (y->color==RBTREE_RED)
             {
                 z->parent->color = RBTREE_BLACK;
@@ -86,10 +87,10 @@ void insert_fixup(rbtree *t, node_t *z){
                 {
                     z=z->parent;
                     right_rotate(t,z);
-                    z->parent->color = RBTREE_BLACK;
-                    z->parent->parent->color = RBTREE_RED;
-                    left_rotate(t,z->parent->parent);
                 }
+                z->parent->color = RBTREE_BLACK;
+                z->parent->parent->color = RBTREE_RED;
+                left_rotate(t,z->parent->parent);
             }
         }
     }
@@ -178,8 +179,7 @@ node_t *rbtree_insert(rbtree *t, const key_t key) {
     z -> left = t->nil;
     z -> right = t->nil;
     insert_fixup(t,z);
-    
-    return t->root;
+    return z;
 }
 
 node_t *rbtree_find(const rbtree *t, const key_t key) {
@@ -218,7 +218,6 @@ node_t *rbtree_max(const rbtree *t) {
     return t->root;
 }
 
-
 void rb_transplant(rbtree *t, node_t *u, node_t *v)
 {
     if (u->parent == t->nil)
@@ -251,7 +250,7 @@ node_t *tree_minimum(rbtree *t ,node_t *z)
 void delete_fixup(rbtree *t, node_t *x)
 {
     node_t *w;
-    while (x!=t->nil && x->color == RBTREE_BLACK)
+    while (x!=t->root && x->color == RBTREE_BLACK)
     {
         if (x == x->parent->left)
         {
@@ -347,17 +346,23 @@ int rbtree_erase(rbtree *t, node_t *z) {
         {
             rb_transplant(t, y, y->right);
             y->right = z->right;
-            y->left->parent = y;
-            y->color = z->color;
+            y->right->parent = y;
         }
+        rb_transplant(t,z,y);
+        y->left=z->left;
+        y->left->parent = y;
+        y->color = z->color;
     }
-
+    
     free(z);
+
     if (y_original_color == RBTREE_BLACK)
     {
         delete_fixup(t,x);
     }
     
+    
+
     return 0;
 }
 

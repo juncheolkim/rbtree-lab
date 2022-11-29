@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// 새로운 노드를 만드는 함수
 node_t *new_node(color_t color, key_t key)
 {
     node_t *ptr = (node_t*)malloc(sizeof(node_t));
@@ -14,6 +15,7 @@ node_t *new_node(color_t color, key_t key)
     return ptr;
 }
 
+// 새로운 트리를 만드는 함수
 rbtree *new_rbtree(void) {
     rbtree *p = (rbtree *)calloc(1, sizeof(rbtree));
 
@@ -24,8 +26,8 @@ rbtree *new_rbtree(void) {
     return p;
 }
 
+// 노드 메모리를 반환하는 함수
 void delete_node(rbtree *t,node_t *x) {
-    printf("진입해야만한다.\n");
     if (x->left != t->nil){
         delete_node(t, x->left);
     };
@@ -35,6 +37,7 @@ void delete_node(rbtree *t,node_t *x) {
     free(x);
 }
 
+// 루트의 모든 메모리를 반환하는 함수
 void delete_rbtree(rbtree *t) {
     // TODO: reclaim the tree nodes's memory
     if (t->root != t->nil){
@@ -45,6 +48,7 @@ void delete_rbtree(rbtree *t) {
 }
 
 void left_rotate(rbtree *t, node_t *x);
+
 void right_rotate(rbtree *t, node_t *x);
 
 void insert_fixup(rbtree *t, node_t *z){
@@ -99,6 +103,7 @@ void insert_fixup(rbtree *t, node_t *z){
     t->root->color = RBTREE_BLACK;
 }
 
+// 왼쪽으로 회전
 void left_rotate(rbtree *t, node_t *x)
 {
     node_t *y = x->right;
@@ -124,6 +129,7 @@ void left_rotate(rbtree *t, node_t *x)
     x->parent = y;
 }
 
+// 오른쪽으로 회전
 void right_rotate(rbtree *t, node_t *x)
 {
     node_t *y = x->left;
@@ -149,6 +155,7 @@ void right_rotate(rbtree *t, node_t *x)
     x->parent = y;
 }
 
+// 노드 삽입 함수
 node_t *rbtree_insert(rbtree *t, const key_t key) {
     // TODO: implement insert
     node_t *z = new_node(RBTREE_RED, key); // key 값을 가지는 노드 생성
@@ -184,6 +191,7 @@ node_t *rbtree_insert(rbtree *t, const key_t key) {
     return z;
 }
 
+// 노드 검색 함수
 node_t *rbtree_find(const rbtree *t, const key_t key) {
     // TODO: implement find
     node_t* p = t->root;
@@ -207,19 +215,33 @@ node_t *rbtree_find(const rbtree *t, const key_t key) {
     return tmp;
 }
 
-
-
-
+// 루트 최소값 검색
 node_t *rbtree_min(const rbtree *t) {
     // TODO: implement find
-    return t->root;
+    node_t *p = t->root;
+    node_t *tmp = t->nil;
+    while (p!=t->nil)
+    {
+        tmp = p;
+        p = p->left;
+    }
+    return tmp;
 }
 
+// 루트 최대값 검색
 node_t *rbtree_max(const rbtree *t) {
     // TODO: implement find
-    return t->root;
+    node_t *p = t->root;
+    node_t *tmp = t->nil;
+    while (p!=t->nil)
+    {
+        tmp = p;
+        p = p->right;
+    }
+    return tmp;
 }
 
+// 끊긴 노드 이식 함수
 void rb_transplant(rbtree *t, node_t *u, node_t *v)
 {
     if (u->parent == t->nil)
@@ -237,6 +259,7 @@ void rb_transplant(rbtree *t, node_t *u, node_t *v)
     v->parent = u->parent;
 }
 
+// 서브트리의 최소값 검색
 node_t *tree_minimum(rbtree *t ,node_t *z)
 {
     node_t *tmp = t->nil;
@@ -248,6 +271,7 @@ node_t *tree_minimum(rbtree *t ,node_t *z)
     
     return tmp;
 }
+
 
 void delete_fixup(rbtree *t, node_t *x)
 {
@@ -320,6 +344,7 @@ void delete_fixup(rbtree *t, node_t *x)
     x->color = RBTREE_BLACK;
 }
 
+
 int rbtree_erase(rbtree *t, node_t *z) {
     // TODO: implement erase
     node_t *y = z;
@@ -362,14 +387,9 @@ int rbtree_erase(rbtree *t, node_t *z) {
     {
         delete_fixup(t,x);
     }
-    
-    
 
     return 0;
 }
-
-
-
 
 int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) {
     // TODO: implement to_array

@@ -368,16 +368,16 @@ void test_find_erase_rand(const size_t n, const unsigned int seed) {
 }
 
 int main(void) {
-    test_init(); // 메모리 누수 x
-    test_insert_single(1024); // 메모리 누수 x
-    test_find_single(512, 1024); // 메모리 누수 x
-    test_erase_root(128); // 메모리 누수 x
-    test_find_erase_fixed(); // 메모리 누수 x
-    // test_minmax_suite();
-    // test_to_array_suite();
-    // test_distinct_values();
-    // test_duplicate_values();
-    // test_multi_instance();
-    // test_find_erase_rand(10000, 17);
+    test_init();
+    test_insert_single(1024);
+    test_find_single(512, 1024);
+    test_erase_root(128);
+    test_find_erase_fixed();
+    test_minmax_suite();
+    // test_to_array_suite(); // TODO
+    test_distinct_values();
+    test_duplicate_values();
+    // test_multi_instance(); // TODO
+    test_find_erase_rand(10000, 17);
     printf("Passed all tests!\n");
 }
